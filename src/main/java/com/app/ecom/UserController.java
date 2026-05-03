@@ -2,6 +2,7 @@ package com.app.ecom;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +15,10 @@ public class UserController {
 
 
     @GetMapping("/api/users")
-     public List<User> getAllUsers(){
+     public ResponseEntity<List<User>> getAllUsers(){
 
-         return userService.fetchAllUsers();
+         return new ResponseEntity<>(userService.fetchAllUsers(),
+                 HttpStatus.OK);
      }
     @GetMapping("/api/users/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
@@ -27,10 +29,19 @@ public class UserController {
         return ResponseEntity.ok(user); // 200 with data
     }
     @PostMapping("/api/users")
-    public String createUsers( @Valid @RequestBody User user){
+    public ResponseEntity<String> createUsers( @Valid @RequestBody User user){
         System.out.println("POST hit: " + user);
         userService.addUser(user);
-        return "user added succesfully";
+        return ResponseEntity.ok("user added succesfully");
     }
+    @PutMapping("/api/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        User user = userService.updateUsers(id, updatedUser);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
+    }
+
 
 }

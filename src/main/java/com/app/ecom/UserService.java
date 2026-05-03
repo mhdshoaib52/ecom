@@ -23,7 +23,12 @@ public class UserService {
     public User fetchUsers(Long serialId) {
         return userRepository.findBySerialId(serialId);
     }
-
-
+    public User updateUsers(Long serialId, User updatedUser) {
+        User existing = userRepository.findBySerialId(serialId);
+        if (existing == null) return null;
+        existing.setFirstName(updatedUser.getFirstName());
+        existing.setLastName(updatedUser.getLastName());
+        return userRepository.save(existing);
+    }
 
 }

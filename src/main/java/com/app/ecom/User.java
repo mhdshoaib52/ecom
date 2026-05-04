@@ -1,17 +1,21 @@
 package com.app.ecom;
 
+//import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Pattern;
-import lombok.Generated;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "users")
 public class User {
-    @Id
 
+    @Id
     private String id;
     private Long serialId;
     @NotBlank(message = "First name is required")
@@ -19,4 +23,5 @@ public class User {
     private String firstName;
     @NotBlank(message = "Last name is required")
     private String lastName;
+
 }

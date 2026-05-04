@@ -10,17 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/users/")
 public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/api/users")
+    @GetMapping
+//    @RequestMapping(value = "/api/users",method = RequestMethod.GET)
      public ResponseEntity<List<User>> getAllUsers(){
 
          return new ResponseEntity<>(userService.fetchAllUsers(),
                  HttpStatus.OK);
      }
-    @GetMapping("/api/users/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         User user = userService.fetchUsers(id);
         if (user == null) {
@@ -28,13 +30,13 @@ public class UserController {
         }
         return ResponseEntity.ok(user); // 200 with data
     }
-    @PostMapping("/api/users")
+    @PostMapping
     public ResponseEntity<String> createUsers( @Valid @RequestBody User user){
         System.out.println("POST hit: " + user);
         userService.addUser(user);
         return ResponseEntity.ok("user added succesfully");
     }
-    @PutMapping("/api/users/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         User user = userService.updateUsers(id, updatedUser);
         if (user == null) {

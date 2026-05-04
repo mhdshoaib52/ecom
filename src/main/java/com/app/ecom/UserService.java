@@ -16,11 +16,12 @@ public class UserService {
 
     public void addUser(User user) {
         user.setSerialId(nextId++);
+
         userRepository.save(user);
     }
 
     // UserService.java
-    public User fetchUsers(Long serialId) {
+    public  User fetchUsers(Long serialId) {
         return userRepository.findBySerialId(serialId);
     }
     public User updateUsers(Long serialId, User updatedUser) {

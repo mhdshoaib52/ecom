@@ -21,7 +21,7 @@ public class UserService {
     }
 
     // UserService.java
-    public User fetchUsers(Long serialId) {
+    public  User fetchUsers(Long serialId) {
         return userRepository.findBySerialId(serialId);
     }
     public User updateUsers(Long serialId, User updatedUser) {

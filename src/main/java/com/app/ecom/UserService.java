@@ -16,6 +16,7 @@ public class UserService {
 
     public void addUser(User user) {
         user.setSerialId(nextId++);
+
         userRepository.save(user);
     }
 

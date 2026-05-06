@@ -20,4 +20,7 @@ public class UserResponse {
     private UserRole role;
 
     private AddressDTO addressDTO;
+
+    public void setAddress(AddressDTO addressDTO) {
+    }
 }

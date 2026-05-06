@@ -1,6 +1,7 @@
 package com.app.ecom.model;
 
 //import jakarta.persistence.Entity;
+import com.app.ecom.dto.UserResponse;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.mongodb.core.mapping.event.AuditingEntityCallback;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -45,5 +47,9 @@ public class User {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+//    public Optional<UserResponse> map(Object mapToUserResponse) {
+//
+//    }
 
 }

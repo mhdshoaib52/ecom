@@ -17,4 +17,7 @@ public class UserRequest {
 
     private String phone;
     private AddressDTO addressDTO;
+
+//    public boolean getAddress() {
+//    }
 }

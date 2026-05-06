@@ -1,5 +1,6 @@
 package com.app.ecom.controller;
 
+import com.app.ecom.dto.UserRequest;
 import com.app.ecom.dto.UserResponse;
 import com.app.ecom.model.User;
 import com.app.ecom.service.UserService;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users/")
@@ -25,22 +28,22 @@ public class UserController {
                  HttpStatus.OK);
      }
     @GetMapping("{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        User user = userService.fetchUsers(id);
+    public ResponseEntity<Optional<UserResponse>> getUser(@PathVariable Long id) {
+        Optional<UserResponse> user = userService.fetchUsers(id);
         if (user == null) {
             return ResponseEntity.notFound().build(); // 404
         }
         return ResponseEntity.ok(user); // 200 with data
     }
     @PostMapping
-    public ResponseEntity<String> createUsers( @Valid @RequestBody User user){
-        System.out.println("POST hit: " + user);
-        userService.addUser(user);
+    public ResponseEntity<String> createUsers( @Valid @RequestBody UserRequest userRequest){
+        System.out.println("POST hit: " + userRequest);
+        userService.addUser(userRequest);
         return ResponseEntity.ok("user added succesfully");
     }
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User user = userService.updateUsers(id, updatedUser);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest updatedUserRequest) {
+        User user = userService.updateUsers(id, updatedUserRequest);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }

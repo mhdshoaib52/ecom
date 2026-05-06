@@ -1,11 +1,17 @@
 package com.app.ecom.service;
 
+import com.app.ecom.dto.AddressDTO;
+import com.app.ecom.dto.UserRequest;
 import com.app.ecom.dto.UserResponse;
+import com.app.ecom.model.Address;
+import com.app.ecom.model.UserRole;
 import com.app.ecom.repository.UserRepository;
 import com.app.ecom.model.User;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -14,24 +20,42 @@ public class UserService {
     private Long nextId = 101L;
 
     public List<UserResponse> fetchAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll().stream()
+                .map(this::mapToUserResponse).collect(Collectors.toList());
     }
 
-    public void addUser(User user) {
-        user.setSerialId(nextId++);
-
+    public void addUser(UserRequest userRequest) {
+//        user.setSerialId(nextId++);
+            User user = new User();
+            updateUserFromRequest(user,userRequest);
         userRepository.save(user);
     }
 
+
+
     // UserService.java
-    public  User fetchUsers(Long serialId) {
-        return userRepository.findBySerialId(serialId);
+    public Optional<UserResponse> fetchUsers(Long serialId) {
+        return userRepository.findBySerialId(serialId).map(this::mapToUserResponse);
     }
-    public User updateUsers(Long serialId, User updatedUser) {
-        User existing = userRepository.findBySerialId(serialId);
-        if (existing == null) return null;
-        existing.setFirstName(updatedUser.getFirstName());
-        existing.setLastName(updatedUser.getLastName());
+    private void updateUserFromRequest(User user, UserRequest userRequest) {
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getEmail());
+        user.setPhone(userRequest.getPhone());
+
+        if (userRequest.getAddressDTO() != null){
+            Address address = new Address();
+            address.setStreet(userRequest.getAddressDTO().getStreet());
+            address.setState(userRequest.getAddressDTO().getState());
+            address.setCountry(userRequest.getAddressDTO().getCountry());
+            address.setZipCode(userRequest.getAddressDTO().getZipCode());
+            address.setCity(userRequest.getAddressDTO().getCity());
+        }
+    }
+    public User updateUsers(Long serialId, UserRequest updatedUserRequest) {
+        User existing = userRepository.findBySerialId(serialId).orElseThrow(() -> new RuntimeException("User not found"));
+        existing.setFirstName(updatedUserRequest.getFirstName());
+        existing.setLastName(updatedUserRequest.getLastName());
         return userRepository.save(existing);
     }
     private UserResponse mapToUserResponse(User user){
@@ -42,19 +66,19 @@ public class UserService {
         response.setEmail(String.valueOf(user.getEmail()));
         response.setId(String.valueOf(user.getId()));
         response.setPhone(String.valueOf(user.getPhone()));
-        response.setRole(String.valueOf(user.getRole()));
+        response.setRole(UserRole.valueOf(String.valueOf(user.getRole())));
 
         if (user.getAddress() != null) {
-            AddressResponse addressResponse = new AddressResponse();
-            addressResponse.setStreet(user.getAddress().getStreet());
-            addressResponse.setCity(user.getAddress().getCity());
-            addressResponse.setState(user.getAddress().getState());
-            addressResponse.setCountry(user.getAddress().getCountry());
-            addressResponse.setZipCode(user.getAddress().getZipCode());
+            AddressDTO addressDTO = new AddressDTO();
+            addressDTO.setStreet(user.getAddress().getStreet());
+            addressDTO.setCity(user.getAddress().getCity());
+            addressDTO.setState(user.getAddress().getState());
+            addressDTO.setCountry(user.getAddress().getCountry());
+            addressDTO.setZipCode(user.getAddress().getZipCode());
 
-            response.setAddress(addressResponse);
+            response.setAddress(addressDTO);
         }
-
+        return response;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.app.ecom;
+package com.app.ecom.model;
 
 //import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Pattern;
@@ -23,5 +23,10 @@ public class User {
     private String firstName;
     @NotBlank(message = "Last name is required")
     private String lastName;
+    @NotBlank(message = "EmailId required")
+    private String email;
+    @NotBlank(message = "Phone number required")
+    private String phone;
+    private UserRole role = UserRole.CUSTOMER;
 
 }

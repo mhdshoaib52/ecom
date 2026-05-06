@@ -1,5 +1,6 @@
 package com.app.ecom.controller;
 
+import com.app.ecom.dto.UserResponse;
 import com.app.ecom.model.User;
 import com.app.ecom.service.UserService;
 import jakarta.validation.Valid;
@@ -18,7 +19,7 @@ public class UserController {
 
     @GetMapping
 //    @RequestMapping(value = "/api/users",method = RequestMethod.GET)
-     public ResponseEntity<List<User>> getAllUsers(){
+     public ResponseEntity<List<UserResponse>> getAllUsers(){
 
          return new ResponseEntity<>(userService.fetchAllUsers(),
                  HttpStatus.OK);

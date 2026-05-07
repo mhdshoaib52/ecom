@@ -50,6 +50,7 @@ public class UserService {
             address.setCountry(userRequest.getAddressDTO().getCountry());
             address.setZipCode(userRequest.getAddressDTO().getZipCode());
             address.setCity(userRequest.getAddressDTO().getCity());
+            user.setAddress(address);
         }
     }
     public User updateUsers(Long serialId, UserRequest updatedUserRequest) {
@@ -61,6 +62,7 @@ public class UserService {
     private UserResponse mapToUserResponse(User user){
         UserResponse response = new UserResponse();
         response.setId(String.valueOf(user.getId()));
+        response.setSerialId(user.getSerialId());
         response.setFirstName(String.valueOf(user.getFirstName()));
         response.setLastName(String.valueOf(user.getLastName()));
         response.setEmail(String.valueOf(user.getEmail()));
@@ -76,7 +78,7 @@ public class UserService {
             addressDTO.setCountry(user.getAddress().getCountry());
             addressDTO.setZipCode(user.getAddress().getZipCode());
 
-            response.setAddress(addressDTO);
+            response.setAddressDTO(addressDTO);
         }
         return response;
     }

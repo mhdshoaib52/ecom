@@ -1,7 +1,9 @@
 package com.app.ecom.dto;
 
-import java.math.BigDecimal;
+import lombok.Data;
 
+import java.math.BigDecimal;
+@Data
 public class ProductResponse {
     private Long id;
     private String name;
@@ -11,4 +13,6 @@ public class ProductResponse {
     private String category;
     private String imageUrl;
     private Boolean active ;
+
+
 }

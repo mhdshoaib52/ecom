@@ -5,18 +5,31 @@ import com.app.ecom.dto.ProductRequest;
 import com.app.ecom.dto.ProductResponse;
 import com.app.ecom.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/products")
 public class ProductController {
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable String id) {
+        return ResponseEntity.ok(productService.getProductById(id));
+    }
     private final ProductService productService;
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
-        Return new ResponseEntity<ProductResponse>(productService.createProduct(productRequest).httpStatus.CREATED);
+        return  new ResponseEntity<ProductResponse>(productService.createProduct(productRequest), HttpStatus.CREATED);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable String id,@RequestBody ProductRequest productRequest) {
+        return  productService.updateProduct(id,productRequest).map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+
+//                new ResponseEntity<ProductResponse>(productService.updateProduct(id,productRequest), HttpStatus.OK);
+
     }
 }

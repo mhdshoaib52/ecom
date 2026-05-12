@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Document(collection = "products")
 public class Product {
     @Id
-    private Long id;
+    private String id;
     private String name;
     private String description;
     private BigDecimal price;
@@ -29,4 +29,8 @@ public class Product {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public Boolean isActive() {
+        return null;
+    }
 }

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//import static java.util.stream.Nodes.collect;
-
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -78,16 +76,17 @@ public class ProductService {
         response.setActive(product.isActive());
         return response;
     }
-
-    public List<ProductResponse> getAllProducts() {
-        return productRepository.findByActiveTrue().stream()
-                .map(this:: mapToProductResponse).
-                collect(Collectors.toList());
+        public List<ProductResponse> getAllProducts() {
+            return productRepository.findByActiveTrue().stream()
+                    .map(this::mapToResponse).
+                    collect(Collectors.toList());
     }
 
-    public void deleteProduct(String id) {
-       Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("product not found"));
-        product.setActive(false);
+    public boolean deleteProduct(String id) {
+        return productRepository.findById(id).map(product -> {product.setActive(false);
         productRepository.save(product);
+            return true;
+        }).orElse(false);
+
     }
 }

@@ -11,4 +11,9 @@ public class ProductRequest {
     private Integer stockQuantity;
     private String category;
     private String imageUrl;
+
+    private boolean active;
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }

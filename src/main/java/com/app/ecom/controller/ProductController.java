@@ -40,11 +40,15 @@ public class ProductController {
     }
     @DeleteMapping ("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+        boolean deleted = productService.deleteProduct(id);
+        return deleted ? ResponseEntity.noContent().build(): ResponseEntity.notFound().build();
 
 //                new ResponseEntity<ProductResponse>(productService.updateProduct(id,productRequest), HttpStatus.OK);
 
+    }
+    @GetMapping ("/search")
+    public ResponseEntity<List<ProductResponse>>searchProduct(@RequestParam String keyWord ) {
+        return ResponseEntity.ok(productService.searchProduct(keyWord));
     }
 
 }

@@ -44,6 +44,7 @@ public class ProductService {
         product.setImageUrl(productRequest.getImageUrl());
         product.setPrice(productRequest.getPrice());
         product.setDescription(productRequest.getDescription());
+        product.setActive(productRequest.isActive());
     }
 
     public Optional<ProductResponse> updateProduct(String id, ProductRequest productRequest) {
@@ -88,5 +89,10 @@ public class ProductService {
             return true;
         }).orElse(false);
 
+    }
+
+    public List<ProductResponse> searchProduct(String keyWord) {
+        return productRepository.searchProduct(keyWord).stream().map(this::mapToProductResponse)
+                .collect(Collectors.toList());
     }
 }

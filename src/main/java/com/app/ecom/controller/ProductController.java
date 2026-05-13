@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +21,10 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProductById(@PathVariable String id) {
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+    @GetMapping
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
     private final ProductService productService;
     @PostMapping
@@ -32,4 +38,13 @@ public class ProductController {
 //                new ResponseEntity<ProductResponse>(productService.updateProduct(id,productRequest), HttpStatus.OK);
 
     }
+    @DeleteMapping ("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+
+//                new ResponseEntity<ProductResponse>(productService.updateProduct(id,productRequest), HttpStatus.OK);
+
+    }
+
 }

@@ -8,7 +8,11 @@ import com.app.ecom.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+//import static java.util.stream.Nodes.collect;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +77,17 @@ public class ProductService {
         response.setDescription(product.getDescription());
         response.setActive(product.isActive());
         return response;
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findByActiveTrue().stream()
+                .map(this:: mapToProductResponse).
+                collect(Collectors.toList());
+    }
+
+    public void deleteProduct(String id) {
+       Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("product not found"));
+        product.setActive(false);
+        productRepository.save(product);
     }
 }

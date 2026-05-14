@@ -17,13 +17,16 @@ import java.time.LocalDateTime;
 public class CartItem {
     private String id;
 @NotNull
-    private User user;
+    private
+    User user;
     private Product product;
-    private  Integer integer;
-    private BigDecimal quantity;
+    private Integer quantity;
+    private BigDecimal price;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
+    public void setPrice(BigDecimal multiply) {
+    }
 }

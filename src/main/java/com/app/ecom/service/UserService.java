@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 //    private Long nextId = 101L;
-
+private final AtomicLong nextId = new AtomicLong(101L);
     public List<UserResponse> fetchAllUsers() {
         return userRepository.findAll().stream()
                 .map(this::mapToUserResponse).collect(Collectors.toList());
     }
 
-    private final AtomicLong nextId = new AtomicLong(101L);
+
 
     public void addUser(UserRequest userRequest) {
         User user = new User();

@@ -54,4 +54,13 @@ public class CartService {
         }
         return true;
     }
+
+    public boolean deleteItemFromCart(String userId, String productId) {
+        Optional<Product> productOpt = productRepository.findById(productId());
+        if (productOpt.isEmpty())
+            return false;
+        Optional<User>userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty())
+            return false;
+    }
 }

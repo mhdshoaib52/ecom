@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 public class CartController {
     private final CartService cartService;
-    @PutMapping
+    @PostMapping
     public ResponseEntity<String> addToCart(
             @RequestHeader("X-User_ID") String userId,
              @RequestBody CartItemRequest request){

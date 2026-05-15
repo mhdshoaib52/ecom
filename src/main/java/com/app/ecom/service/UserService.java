@@ -11,31 +11,34 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private Long nextId = 101L;
+//    private Long nextId = 101L;
 
     public List<UserResponse> fetchAllUsers() {
         return userRepository.findAll().stream()
                 .map(this::mapToUserResponse).collect(Collectors.toList());
     }
 
+    private final AtomicLong nextId = new AtomicLong(101L);
+
     public void addUser(UserRequest userRequest) {
-//        user.setSerialId(nextId++);
-            User user = new User();
-            updateUserFromRequest(user,userRequest);
+        User user = new User();
+        user.setSerialId(nextId.getAndIncrement());
+        updateUserFromRequest(user, userRequest);
         userRepository.save(user);
     }
 
 
 
     // UserService.java
-    public Optional<UserResponse> fetchUsers(Long serialId) {
-        return userRepository.findBySerialId(serialId).map(this::mapToUserResponse);
+    public Optional<UserResponse> fetchUsers(String id) {
+        return userRepository.findById(id).map(this::mapToUserResponse);
     }
     private void updateUserFromRequest(User user, UserRequest userRequest) {
         user.setFirstName(userRequest.getFirstName());
@@ -53,8 +56,9 @@ public class UserService {
             user.setAddress(address);
         }
     }
-    public User updateUsers(Long serialId, UserRequest updatedUserRequest) {
-        User existing = userRepository.findBySerialId(serialId).orElseThrow(() -> new RuntimeException("User not found"));
+    public User updateUsers(String id, UserRequest updatedUserRequest) {
+        User existing = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         existing.setFirstName(updatedUserRequest.getFirstName());
         existing.setLastName(updatedUserRequest.getLastName());
         return userRepository.save(existing);

@@ -24,27 +24,24 @@ public class CartService {
 
 
     public boolean addToCart(String userId, CartItemRequest request) {
-        //look for product
         Optional<Product> productOpt = productRepository.findById(request.getProductId());
-        if (productOpt.isEmpty())
-            return false;
+        if (productOpt.isEmpty()) return false;
+
         Product product = productOpt.get();
-        if (product.getStockQuantity() < request.getQuantity())
-            return false;
-        Optional<User>userOpt = userRepository.findById(userId);
-        if (userOpt.isEmpty())
-            return false;
+        if (product.getStockQuantity() < request.getQuantity()) return false;
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) return false;
 
         User user = userOpt.get();
 
-        CartItem existingCartItem = cartItemRepository.findByUserAndProduct(user,product);
+        CartItem existingCartItem = cartItemRepository.findByUserIdAndProductId(userId, product.getId());
 
         if (existingCartItem != null) {
             existingCartItem.setQuantity(existingCartItem.getQuantity() + request.getQuantity());
             existingCartItem.setPrice(product.getPrice().multiply(BigDecimal.valueOf(existingCartItem.getQuantity())));
             cartItemRepository.save(existingCartItem);
         } else {
-            //create new cart item
             CartItem cartItem = new CartItem();
             cartItem.setUser(user);
             cartItem.setProduct(product);
@@ -56,11 +53,16 @@ public class CartService {
     }
 
     public boolean deleteItemFromCart(String userId, String productId) {
-        Optional<Product> productOpt = productRepository.findById(productId());
-        if (productOpt.isEmpty())
-            return false;
-        Optional<User>userOpt = userRepository.findById(userId);
-        if (userOpt.isEmpty())
-            return false;
+        Optional<Product> productOpt = productRepository.findById(productId);
+        if (productOpt.isEmpty()) return false;
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) return false;
+
+        CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId);
+        if (cartItem == null) return false;
+
+        cartItemRepository.delete(cartItem);
+        return true;
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CartItemRepository extends MongoRepository<CartItem, String> {
     @Query("{ 'user._id': ?0, 'product._id': ?1 }")
@@ -15,4 +17,6 @@ public interface CartItemRepository extends MongoRepository<CartItem, String> {
 
 
     void deleteByUserAndProduct(User user, Product product);
+    @Query("{ 'user._id': ?0 }")
+    List<CartItem> findByUserId(String userId);
 }

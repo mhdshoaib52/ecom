@@ -72,14 +72,26 @@ public class CartService {
 //
 //    }
 
-    public List<CartItem> getCartItem(String userId) {
-        return userRepository.findById(Long.valueOf(userId)).map(
-                cartItemRepository::findByUser).orElseGet(List::of);
+    public List<CartItem> getCart(String userId) {
+        return userRepository.findById(userId)
+                .map(user -> cartItemRepository.findByUserId(user.getId()))
+                .orElseGet(List::of);
     }
 
     public void clearCart(String userId) {
-        userRepository.findById(Long.valueOf(userId)).ifPresent(user ->;
-                cartItemRepository.deleteByUser (user);
-                );
+        userRepository.findById(String.valueOf(userId)).ifPresent(
+                cartItemRepository::deleteByUser);
+                
     }
+
+
+
+
+    public List<CartItem> getCartItems(String userId) {
+        return userRepository.findById(userId)
+                .map(user -> cartItemRepository.findByUserId(user.getId()))
+                .orElseGet(List::of);
+    }
+
+
 }

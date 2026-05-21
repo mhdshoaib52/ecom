@@ -17,8 +17,8 @@ public class OrderItem {
     private Product product;
     private Integer quantity;
     private BigDecimal price;
+
     private Order order;
 
-    public OrderItem(Object o, Product product, Integer quantity, BigDecimal price, Order order) {
-    }
+
 }

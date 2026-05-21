@@ -1,6 +1,7 @@
 package com.app.ecom.service;
 
 
+import com.app.ecom.dto.OrderItemDTO;
 import com.app.ecom.dto.OrderResponse;
 import com.app.ecom.model.*;
 import com.app.ecom.repository.OrderRepository;
@@ -16,8 +17,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
-@NoArgsConstructor
+
+
 public class OrderService {
 
 
@@ -26,7 +27,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     public Optional<OrderResponse> createOrder(String userId) {
         //validate for cart items
-       List<CartItem> cartItem = cartService.getCartItem(userId) ;
+       List<CartItem> cartItem = cartService.getCartItems(userId) ;
        if (cartItem.isEmpty()){
            return Optional.empty();
 
@@ -62,8 +63,24 @@ public class OrderService {
         //clear the cart
         cartService.clearCart(userId);
 
+        return Optional.of(mapToOrderResponse(savedOrder));
 
+    }
 
+    private OrderResponse mapToOrderResponse(Order order) {
+        return new OrderResponse(
+                order.getId(),
+                order.getTotalAmount(),
+                order.getStatus(),
+                order.getItems().stream()
+                        .map(orderItem -> new OrderItemDTO(
+                                orderItem.getId(),
+                                orderItem.getProduct().getId(),
+                                orderItem.getQuantity(),
+                                orderItem.getPrice(),
+                                orderItem.getPrice().multiply(new BigDecimal(orderItem.getQuantity()))
+                        )).toList(),order.getCreatedAt()
 
+        );
     }
 }

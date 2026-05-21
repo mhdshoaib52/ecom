@@ -19,4 +19,6 @@ public interface CartItemRepository extends MongoRepository<CartItem, String> {
     void deleteByUserAndProduct(User user, Product product);
     @Query("{ 'user._id': ?0 }")
     List<CartItem> findByUserId(String userId);
+
+    Object findByUser(@org.jetbrains.annotations.NotNull User user);
 }

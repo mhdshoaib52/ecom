@@ -1,5 +1,6 @@
 package com.app.ecom.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem {
     @Id
     private String id;
@@ -16,4 +18,7 @@ public class OrderItem {
     private Integer quantity;
     private BigDecimal price;
     private Order order;
+
+    public OrderItem(Object o, Product product, Integer quantity, BigDecimal price, Order order) {
+    }
 }

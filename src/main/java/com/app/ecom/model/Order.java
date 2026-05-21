@@ -1,6 +1,7 @@
 package com.app.ecom.model;
 
 
+import com.app.ecom.repository.OrderRepository;
 import jakarta.websocket.OnError;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @Document(collection = "order")
 
 public class Order {
+
     private String id;
     private User user;
     private BigDecimal totalAmount;
